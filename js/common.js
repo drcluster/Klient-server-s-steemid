@@ -82,6 +82,35 @@ $(document).ready(function() {
             }
         });
 
+        $('#find_closest').on('click', function() {
+            var dataAction = "find_closest";
+            var areaArea = $("#city").val();
+            var stopName = $("#busstop").val();
+
+            if($("#busstop").val()) {
+                $.ajax({
+                    url: "functions.php",
+                    type: "GET",
+                    dataType: "json",
+                    data: {
+                        action: dataAction,
+                        stop_name: stopName,
+                        stop_area: areaArea
+                    },
+                    success: function(data) {
+                        $(".js-times").empty();
+
+                        $.each(data, function(index, item) {
+                            $(".js-times").append("<button type=\"button\" class=\"btn btn-sm\">" + item + "</button>&nbsp;");
+                        });
+                    },
+                    error: function(xhr, status, error) {
+                        console.error("An error occurred: " + error);
+                    }
+                });
+            }
+        });
+
         $(document).on('click', ".js-select-bus", function(e) {
             var dataAction = "find_times";
             var busName = $(this).text();

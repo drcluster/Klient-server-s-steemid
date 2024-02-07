@@ -125,4 +125,25 @@ if($_GET["action"] == "find_city") {
     $closestTimes = findClosestTimes($arrival_times, $myTime);
 
     echo json_encode(array_unique($closestTimes), JSON_UNESCAPED_UNICODE);
+} elseif($_GET["action"] == "find_closest") {
+    $data = [];
+    $sql = "SELECT stop_lat, stop_lon FROM stops WHERE stop_name = '" . $_GET["stop_name"] . "' AND stop_area = '" . $_GET["stop_area"] . "' LIMIT 1";
+    $result = $conn->query($sql);
+
+    if ($result->num_rows > 0) {
+        $row = $result->fetch_assoc();
+        $lat1 = $row['stop_lat'];
+        $lon1 = $row['stop_lon'];
+
+        $sql = "SELECT stop_name, stop_area, ( 6371 * acos( cos( radians($lat1) ) * cos( radians( stop_lat ) ) * cos( radians( stop_lon ) - radians($lon1) ) + sin( radians($lat1) ) * sin( radians( stop_lat ) ) ) ) AS distance FROM stops HAVING distance < 10 AND stop_name != '" . $_GET["stop_name"] . "' ORDER BY distance LIMIT 1";
+
+        $result = $conn->query($sql);
+
+        if ($result->num_rows > 0) {
+            $row = $result->fetch_assoc();
+            $data[] = "Lähim peatus " . $row['stop_name'] . " " . $row['stop_area'];
+        }
+    }
+
+    echo json_encode(array_unique($data), JSON_UNESCAPED_UNICODE);
 }

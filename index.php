@@ -33,7 +33,6 @@
 </head>
 
 <body>
-  
     <div class="container mt-4">
         <form>
             <div class="row mb-3">
@@ -60,7 +59,10 @@
             </div>
             <div class="row mb-3">
                 <div class="col-auto">
-                    <button type="button" class="btn btn-primary" id="find_bus">Otsi</button>
+                    <button type="button" class="btn btn-primary" id="find_bus">Otsi bussid</button>
+                </div>
+                <div class="col-auto">
+                    <button type="button" class="btn btn-primary" id="find_closest">Leidke lähim peatus</button>
                 </div>
             </div>
             <div class="row mb-3">
